@@ -1,0 +1,40 @@
+@import 'fonts';
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.blobs {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+
+  filter: url('#goo');
+}
+
+.blob {
+  position: absolute;
+  background:#e97b7a;
+  left: 50%;
+  top: 50%;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  color:white;
+  font-size: 40px;
+  border-radius: 100%;
+  margin-top: -50px;
+  margin-left: -50px;
+}
