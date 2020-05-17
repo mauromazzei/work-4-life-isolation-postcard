@@ -5,7 +5,10 @@ import ISData from '../data/ISData';
 import Wrapper from '../modules/Wrapper';
 import Config from '../data/Config';
 
-import {gsap, Power4, TweenMax} from 'gsap'
+import {gsap, Power4, TweenMax, TimelineMax} from 'gsap'
+import Text from '../modules/Text';
+import Carousel from '../modules/carousel/Carousel';
+import Store from '../data/Store';
 
 export default class Application {
 
@@ -18,6 +21,9 @@ export default class Application {
   private lifeAnimationSequence:TweenMax
   private workAnimationSequence:TweenMax
 
+  private carousel:Carousel
+  private text:Text
+
   constructor() {
     PIXI.utils.skipHello();
 
@@ -29,35 +35,63 @@ export default class Application {
       backgroundColor: 0xffffff
     });
     document.body.appendChild(this.app.view);
+    Store.app = this.app
 
     // create the container that will wrap every visible object
     this.container = new PIXI.Container()
     this.app.stage.addChild(this.container)
 
     this.workWrapper = new Wrapper({
-      text: 'WORK  ',
+      text: 'WORK',
+      maskText: 'WORK',
       direction: -1,
       y: window.innerHeight - (window.innerHeight / 2)
     })
 
     this.lifeWrapper = new Wrapper({
-      text: 'LIFE      ',
+      text: 'LIFE',
+      maskText: 'LIFE',
       direction: 1,
       y: (window.innerHeight * -1) + (window.innerHeight / 2)
     })
     
-    this.container.addChild(this.workWrapper.view)
-    this.container.addChild(this.lifeWrapper.view)
 
-    this.setupAnimation()
+
+    this.carousel = new Carousel({
+      text: 'WORK 4 LIFE',
+      maskText: 'WORK',
+      speed: -5,
+      y: 0
+    })
+    this.container.addChild(this.carousel.view)
+
+    // this.container.addChild(this.workWrapper.view)
+    // this.container.addChild(this.lifeWrapper.view)
+
+    this.setupAnimation(() => {
+      // this.workWrapper.setText('JESUS 4 LIFE ')
+      // this.lifeWrapper.setText('LIFE WORK 4 ')
+
+      // this.workWrapper.animateText()
+    })
+
+
+    // this.text = new Text('WORK 4 LIFE', 0x000000, 'WORK')
+
+    // this.container.addChild(this.text.view)
   }
 
-  private setupAnimation():void {
+  private setupAnimation(callback?:Function):void {
     this.lifeAnimationSequence = gsap.to(this.lifeWrapper.view, {
       duration: 1,
-      y: 0,
+      y: this.lifeWrapper.stripHeight,
       ease: Power4.easeInOut,
-      paused: true
+      paused: true,
+      onComplete: () => {
+        if (typeof(callback) !== 'undefined') {
+          callback()
+        }
+      }
     })
 
     this.workAnimationSequence = gsap.to(this.workWrapper.view, {
@@ -80,13 +114,30 @@ export default class Application {
     if (data) {
       this.lifeAnimationSequence.play()
       this.workAnimationSequence.play()
+
+      this.lifeWrapper.setMargin(this.lifeWrapper.stripHeight * 2)
+      this.workWrapper.setMargin(this.lifeWrapper.stripHeight * 2)
+
+      // this.workWrapper.setText('WORK 4 LIFE  ')
+      // this.lifeWrapper.setText('WORK 4 LIFE  ')
+
+      this.carousel.animate()
+      // this.text.enlarge()
     } else {
       this.lifeAnimationSequence.reverse()
       this.workAnimationSequence.reverse()
+
+      this.lifeWrapper.setMargin(this.lifeWrapper.stripHeight)
+      this.workWrapper.setMargin(this.lifeWrapper.stripHeight)
+
+      // this.workWrapper.setText('WORK  ')
+      // this.lifeWrapper.setText('LIFE  ')
     }
   }
 
   render = (data:ISData):void => {
+    this.carousel.update()
+
     this.workWrapper.update()
     this.lifeWrapper.update()
     this.app.render()

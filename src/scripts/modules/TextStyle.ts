@@ -11,9 +11,6 @@ export default class TextStyle {
   static get style():PIXI.TextStyle { return this.settings }
 
   static measureOfText(text:string):PIXI.TextMetrics { 
-    if (this.measure == null) {
-      this.measure = PIXI.TextMetrics.measureText(text, this.settings)
-    }
-    return this.measure 
+    return PIXI.TextMetrics.measureText(text, this.settings)
   }
 }
