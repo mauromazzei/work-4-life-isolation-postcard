@@ -3,7 +3,6 @@ import * as PIXI from 'pixi.js'
 import ISData from '../data/ISData';
 import Wrapper from '../modules/Wrapper';
 import {gsap, Power4, TweenMax, TimelineMax} from 'gsap'
-import Store from '../data/Store';
 import Background from '../modules/Background'
 import PixiPlugin from 'gsap/PixiPlugin'
 
@@ -13,15 +12,16 @@ PixiPlugin.registerPIXI(PIXI)
 
 
 export default class Application {
-
   private app:PIXI.Application
-  private container:PIXI.Sprite
 
   private workWrapper:Wrapper
   private lifeWrapper:Wrapper
 
   private timeline:TimelineMax
   private background:Background
+
+  private loader:PIXI.Loader
+  private isReady:boolean
 
   constructor() {
     PIXI.utils.skipHello();
@@ -34,44 +34,38 @@ export default class Application {
       backgroundColor: 0xffffff
     });
     document.body.appendChild(this.app.view);
-    Store.app = this.app
 
-    // create the container that will wrap every visible object
-    this.container = new PIXI.Sprite()
-    // this.container.pivot.set(this.container.width / 2, this.container.height / 2)
-    // this.container.pivot.x = window.innerWidth / 2
-    // this.container.pivot.y = window.innerHeight / 2
-    // this.container.anchor.set(0.5, 0.5)
-    this.app.stage.addChild(this.container)
-
+    // we need double the size in case of rotation
     this.app.stage.pivot.x = window.innerWidth
     this.app.stage.pivot.y = window.innerHeight
-
     this.app.stage.x = window.innerWidth / 2
     this.app.stage.y = window.innerHeight / 2
 
-    // Store.gui.add(this.app.stage, 'rotation', -1, 1)
-
     this.background = new Background(0xffffff)
-    this.container.addChild(this.background.view)
+    this.app.stage.addChild(this.background.view)
+  }
 
+  private onLoadComplete = ():void => {
     this.workWrapper = new Wrapper({
-      text: 'WORK  ',
+      text: 'WORK',
       direction: -1,
-      y: (window.innerHeight - (window.innerHeight / 2)) * 2
+      y: (window.innerHeight - (window.innerHeight / 2)) * 2 + 70
     })
 
     this.lifeWrapper = new Wrapper({
-      text: 'LIFE  ',
+      text: 'LIFE',
       direction: 1,
       // y: (window.innerHeight * -1) + (window.innerHeight / 2)
-      y: 0
+      y: -32
     })
 
-    this.container.addChild(this.workWrapper.view)
-    this.container.addChild(this.lifeWrapper.view)
+    this.app.stage.addChild(this.workWrapper.view)
+    this.app.stage.addChild(this.lifeWrapper.view)
 
     this.setupAnimation()
+
+    this.workWrapper.animateColor('#000000', 'WORK')
+    this.lifeWrapper.animateColor('#000000', 'LIFE')
   }
 
   private setupAnimation():void {
@@ -96,13 +90,13 @@ export default class Application {
       ease: Power4.easeInOut,
     }, '-=1')
 
-    // this.timeline.to(this.app.stage, {
-    //   duration: 1,
-    //   pixi: {
-    //     rotation: -30
-    //   },
-    //   ease: Power4.easeInOut,
-    // }, '-=1')
+    this.timeline.to(this.app.stage, {
+      duration: 1,
+      pixi: {
+        rotation: -30
+      },
+      ease: Power4.easeInOut,
+    }, '-=1')
   }
 
   /**************************************************/
@@ -110,7 +104,19 @@ export default class Application {
   /**************************************************/
   
   init = (data:ISData):void => {
-    this.render(data)
+    this.loader = new PIXI.Loader()
+    this.loader.add('gosha_sansultralight', 'fonts/goshasans-ultralight-webfont.woff2');
+
+    this.loader.load(() => {
+      setTimeout(() => {
+        this.onLoadComplete()
+
+      
+        this.isReady = true
+        this.render(data)
+      }, 50)
+      
+    })
   }
 
   changeState = (data:boolean):void => {
@@ -120,24 +126,25 @@ export default class Application {
       this.lifeWrapper.setMargin(this.lifeWrapper.stripHeight * 2)
       this.workWrapper.setMargin(this.lifeWrapper.stripHeight * 2)
 
-      // this.workWrapper.setColor(0xff0000)
-      this.workWrapper.animateColor('#ffffff', 'WORK 4 LIFE  ')
-      this.lifeWrapper.animateColor('#ffffff', 'LIFE WORK 4  ')
+      this.workWrapper.animateColor('#ffffff', 'WORK4LIFE')
+      this.lifeWrapper.animateColor('#ffffff', 'LIFEWORK4')
     } else {
       this.timeline.reverse()
 
       this.lifeWrapper.setMargin(this.lifeWrapper.stripHeight)
       this.workWrapper.setMargin(this.lifeWrapper.stripHeight)
 
-      this.workWrapper.animateColor('#000000', 'WORK  ')
-      this.lifeWrapper.animateColor('#000000', 'LIFE  ')
+      this.workWrapper.animateColor('#000000', 'WORK')
+      this.lifeWrapper.animateColor('#000000', 'LIFE')
     }
   }
 
   render = (data:ISData):void => {
-    this.workWrapper.update()
-    this.lifeWrapper.update()
-    this.app.render()
+    if (this.isReady) {
+      this.workWrapper.update()
+      this.lifeWrapper.update()
+      this.app.render()
+    }
   }
 
   

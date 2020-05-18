@@ -19,7 +19,8 @@ export default class Strip {
   constructor(props:Params) {
     this.props = props
     this.view = new PIXI.Container()
-    this.text = new Text(props.text, 0x000000)
+    // this.text = new Text(props.text, 0x000000)
+    this.text = new Text(props.text, 0xffffff)
 
     this.view.x = 0
     this.view.y = props.y

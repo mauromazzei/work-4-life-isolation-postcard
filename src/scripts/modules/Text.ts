@@ -14,7 +14,7 @@ export default class Text {
     this.text.style.fill = color
 
     // avoid a pixi bug
-    this.text.x = -1000
+    // this.text.x = -1000
   }
 
   animateColor = (color:string, text:string):void => {
