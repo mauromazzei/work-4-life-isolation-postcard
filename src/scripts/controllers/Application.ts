@@ -5,6 +5,7 @@ import Wrapper from '../modules/Wrapper';
 import {gsap, Power4, TweenMax, TimelineMax} from 'gsap'
 import Background from '../modules/Background'
 import PixiPlugin from 'gsap/PixiPlugin'
+import isMobile from 'ismobilejs'
 
 gsap.registerPlugin(PixiPlugin)
 PixiPlugin.registerPIXI(PIXI)
@@ -23,17 +24,26 @@ export default class Application {
   private loader:PIXI.Loader
   private isReady:boolean
 
+  private canvas:HTMLCanvasElement
+
   constructor() {
     PIXI.utils.skipHello();
+
+    this.canvas = document.querySelector('#work4LifeCanvas')
+
+    // fix the canvas for the mobile version
+    if (isMobile(navigator.userAgent).any) {
+      this.canvas.style.position = 'fixed'
+    }
 
     //Create a Pixi Application
     this.app = new PIXI.Application({
       width: window.innerWidth * 2, 
       height: window.innerHeight * 2,
       transparent: false,
-      backgroundColor: 0xff0000
+      backgroundColor: 0xffffff,
+      view: this.canvas
     });
-    document.body.appendChild(this.app.view);
 
     // we need double the size in case of rotation
     this.app.stage.pivot.x = window.innerWidth
@@ -43,6 +53,8 @@ export default class Application {
 
     this.background = new Background(0xffffff)
     this.app.stage.addChild(this.background.view)
+
+    
   }
 
   private onLoadComplete = ():void => {
@@ -155,8 +167,8 @@ export default class Application {
     data.width *= 2
     data.height *= 2
 
-    this.app.view.width = data.width
-    this.app.view.height = data.height
+    this.app.view.width = data.width / 2
+    this.app.view.height = data.height / 2
     this.app.stage.x = window.innerWidth / 2
     this.app.stage.y = window.innerHeight / 2
   }
