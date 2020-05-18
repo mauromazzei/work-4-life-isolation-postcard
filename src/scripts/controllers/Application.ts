@@ -56,13 +56,13 @@ export default class Application {
     this.container.addChild(this.background.view)
 
     this.workWrapper = new Wrapper({
-      text: 'WORK',
+      text: 'WORK  ',
       direction: -1,
       y: (window.innerHeight - (window.innerHeight / 2)) * 2
     })
 
     this.lifeWrapper = new Wrapper({
-      text: 'LIFE',
+      text: 'LIFE  ',
       direction: 1,
       // y: (window.innerHeight * -1) + (window.innerHeight / 2)
       y: 0
@@ -96,13 +96,13 @@ export default class Application {
       ease: Power4.easeInOut,
     }, '-=1')
 
-    this.timeline.to(this.app.stage, {
-      duration: 1,
-      pixi: {
-        rotation: -30
-      },
-      ease: Power4.easeInOut,
-    }, '-=1')
+    // this.timeline.to(this.app.stage, {
+    //   duration: 1,
+    //   pixi: {
+    //     rotation: -30
+    //   },
+    //   ease: Power4.easeInOut,
+    // }, '-=1')
   }
 
   /**************************************************/
@@ -121,16 +121,16 @@ export default class Application {
       this.workWrapper.setMargin(this.lifeWrapper.stripHeight * 2)
 
       // this.workWrapper.setColor(0xff0000)
-      this.workWrapper.animateColor('#ffffff', 'WORK 4 LIFE')
-      this.lifeWrapper.animateColor('#ffffff', 'LIFE WORK 4')
+      this.workWrapper.animateColor('#ffffff', 'WORK 4 LIFE  ')
+      this.lifeWrapper.animateColor('#ffffff', 'LIFE WORK 4  ')
     } else {
       this.timeline.reverse()
 
       this.lifeWrapper.setMargin(this.lifeWrapper.stripHeight)
       this.workWrapper.setMargin(this.lifeWrapper.stripHeight)
 
-      this.workWrapper.animateColor('#000000', 'WORK')
-      this.lifeWrapper.animateColor('#000000', 'LIFE')
+      this.workWrapper.animateColor('#000000', 'WORK  ')
+      this.lifeWrapper.animateColor('#000000', 'LIFE  ')
     }
   }
 
