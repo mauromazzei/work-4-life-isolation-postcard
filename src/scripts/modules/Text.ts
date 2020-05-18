@@ -8,16 +8,21 @@ PixiPlugin.registerPIXI(PIXI)
 
 export default class Text {
   public text:PIXI.Text
+  
 
   constructor(str: string, color:number) {
     this.text = new PIXI.Text(str, TextStyle.style);
     this.text.style.fill = color
 
     // avoid a pixi bug
-    this.text.x = -1000
+    this.text.x = -window.innerWidth * 3
+
+    this.text.cacheAsBitmap = true
   }
 
   animateColor = (color:string, text:string):void => {
+    this.text.cacheAsBitmap = false
+
     gsap.to(this.text.style, {
       duration: 0.5,
       pixi: { fill: color },
@@ -25,11 +30,13 @@ export default class Text {
     }).then(() => {
       this.text.text = text
 
-      gsap.to(this.text.style, {
+      return gsap.to(this.text.style, {
         duration: 0.5,
         pixi: { fill: color },
         ease: Power4.easeOut,
       })
+    }).then(() => {
+      this.text.cacheAsBitmap = true
     })
   }
 
