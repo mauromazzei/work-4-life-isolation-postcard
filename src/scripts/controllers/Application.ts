@@ -3,12 +3,10 @@ import * as PIXI from 'pixi.js'
 // import Strip from '../modules/Strip';
 import ISData from '../data/ISData';
 import Wrapper from '../modules/Wrapper';
-import Config from '../data/Config';
-
-import {gsap, Power4, TweenMax, TimelineMax} from 'gsap'
+import {gsap, Power4, TweenMax} from 'gsap'
 import Text from '../modules/Text';
-import Carousel from '../modules/carousel/Carousel';
 import Store from '../data/Store';
+import CarouselWrapper from '../modules/CarouselWrapper';
 
 export default class Application {
 
@@ -21,7 +19,7 @@ export default class Application {
   private lifeAnimationSequence:TweenMax
   private workAnimationSequence:TweenMax
 
-  private carousel:Carousel
+  private carousel:CarouselWrapper
   private text:Text
 
   constructor() {
@@ -57,10 +55,17 @@ export default class Application {
     
 
 
-    this.carousel = new Carousel({
+    // this.carousel = new RightCarousel({
+    //   text: 'WORK 4 LIFE',
+    //   maskText: 'WORK',
+    //   speed: 10,
+    //   y: 0
+    // })
+
+    this.carousel = new CarouselWrapper({
       text: 'WORK 4 LIFE',
       maskText: 'WORK',
-      speed: -5,
+      direction: 1,
       y: 0
     })
     this.container.addChild(this.carousel.view)

@@ -46,8 +46,6 @@ export default class Text {
   }
 
   enlarge = ():void => {
-    console.log('enlarge')
-
     gsap.to(this.mask, {
       duration: 1,
       width: TextStyle.measureOfText('WORK 4 LIFE').width,
