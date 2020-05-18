@@ -2,11 +2,9 @@ import * as PIXI from 'pixi.js'
 import Text from './Text';
 import ISData from '../data/ISData';
 import TextStyle from './TextStyle';
-import Config from '../data/Config';
 
 interface Params {
   text: string
-  maskText: string
   speed: number
   y:number
 }
@@ -14,52 +12,49 @@ interface Params {
 export default class Strip {
   private text:Text
   private tilingSprite:PIXI.TilingSprite
-  public view:PIXI.Container
   private props:Params
 
-  private originalX:number = 0
-  private posX:number = 0
+  public view:PIXI.Container
 
   constructor(props:Params) {
     this.props = props
     this.view = new PIXI.Container()
-    this.text = new Text(props.text, 0x000000, props.maskText)
+    this.text = new Text(props.text, 0x000000)
 
     this.view.x = 0
     this.view.y = props.y
 
     this.tilingSprite = new PIXI.TilingSprite(
       this.text.texture,
-      window.innerWidth,
+      window.innerWidth * 2,
       TextStyle.measureOfText(this.props.text).height
     );
     this.tilingSprite.interactive = false;
     this.tilingSprite.buttonMode = false;
 
-    // this.tilingSprite.uvMatrix
-
-    this.view.addChild(this.text.view)
+    this.view.addChild(this.text.text)
     this.view.addChild(this.tilingSprite)
-  }
-
-  update = ():void => {
-    this.tilingSprite.tilePosition.x += this.props.speed;
   }
 
   setText = (str:string):void => {
     this.text.text.text = str
   }
 
-  animateText = ():void => {
-    this.text.enlarge()
-    
-    // setTimeout(():void => {
-    //   this.tilingSprite.texture = this.text.texture
-    //   console.log('ok!')
-    // }, 2000)
+  animateColor = (color:string, text:string):void => { this.text.animateColor(color, text) }
+
+  setColor = (color:number) => {
+    // this.text.text.tint = color
+    // this.tilingSprite.tint = color
+    // this.tilingSprite.texture = this.text.text.texture
+
+    this.text.color = color
+  }
+
+  update = ():void => {
+    this.tilingSprite.tilePosition.x += this.props.speed;
   }
 
   resize = (data:ISData):void => {
-    this.tilingSprite.width = data.width
+    this.tilingSprite.width = data.width * 2
   }
 }

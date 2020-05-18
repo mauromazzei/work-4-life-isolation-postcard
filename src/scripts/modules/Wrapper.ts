@@ -8,7 +8,6 @@ import {gsap, Power4} from 'gsap';
 
 interface Params {
   text:string
-  maskText:string
   direction:number
   y:number
 }
@@ -32,7 +31,6 @@ export default class Wrapper {
     for (let i = 0; i < this.rows; i++) {
       strip = new Strip({
         text: this.props.text,
-        maskText: this.props.maskText,
         speed: this.randomIntFromInterval(Config.SPEED_MIN, Config.SPEED_MAX) * this.props.direction,
         y: (TextStyle.measureOfText(this.props.text).height + Config.MARGIN) * i
       })
@@ -52,15 +50,15 @@ export default class Wrapper {
     }
   }
 
-  setText = (str:string):void => {
+  setColor = (color:number):void => {
     for (let i = 0; i < this.strips.length; i++) {
-      this.strips[i].setText(str)
+      this.strips[i].setColor(color)
     }
   }
 
-  animateText = ():void => {
+  animateColor = (color:string, text:string):void => { 
     for (let i = 0; i < this.strips.length; i++) {
-      this.strips[i].animateText()
+      this.strips[i].animateColor(color, text)
     }
   }
 
