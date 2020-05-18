@@ -32,13 +32,25 @@ export default class CarouselWrapper {
 
     let strip:AbstractCarousel
 
+
     for (let i = 0; i < this.rows; i++) {
-      strip = new RightCarousel({
-        text: this.props.text,
-        maskText: this.props.maskText,
-        speed: this.randomIntFromInterval(Config.SPEED_MIN, Config.SPEED_MAX) * this.props.direction,
-        y: (TextStyle.measureOfText(this.props.text).height + Config.MARGIN) * i
-      })
+      if (this.props.direction > 0) {
+        strip = new RightCarousel({
+          text: this.props.text,
+          maskText: this.props.maskText,
+          speed: this.randomIntFromInterval(Config.SPEED_MIN, Config.SPEED_MAX),
+          y: (TextStyle.measureOfText(this.props.text).height + Config.MARGIN) * i
+        })
+        
+      } 
+      else {
+        strip = new LeftCarousel({
+          text: this.props.text,
+          maskText: this.props.maskText,
+          speed: this.randomIntFromInterval(Config.SPEED_MIN, Config.SPEED_MAX) * -1,
+          y: (TextStyle.measureOfText(this.props.text).height + Config.MARGIN) * i
+        })
+      }
 
       this.strips.push(strip)
       this.view.addChild(strip.view)

@@ -13,7 +13,10 @@ interface Params {
 
 export default class RightCarousel extends AbstractCarousel {
   constructor(props:Params) {
-    super(props)    
+    super(props)  
+    
+    console.log('right')
+
     this.group2.view.x = this.group1.view.x - this.group1.view.width
   }
 

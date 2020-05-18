@@ -14,6 +14,9 @@ interface Params {
 export default class LeftCarousel extends AbstractCarousel {
   constructor(props:Params) {
     super(props)    
+
+    console.log('left')
+    
     this.group2.view.x = this.group1.view.width
   }
 

@@ -20,6 +20,7 @@ export default class Application {
   private workAnimationSequence:TweenMax
 
   private carousel:CarouselWrapper
+  private carousel2:CarouselWrapper
   private text:Text
 
   constructor() {
@@ -55,20 +56,22 @@ export default class Application {
     
 
 
-    // this.carousel = new RightCarousel({
-    //   text: 'WORK 4 LIFE',
-    //   maskText: 'WORK',
-    //   speed: 10,
-    //   y: 0
-    // })
 
     this.carousel = new CarouselWrapper({
       text: 'WORK 4 LIFE',
       maskText: 'WORK',
       direction: 1,
-      y: 0
+      y: window.innerHeight - (window.innerHeight / 2)
     })
     this.container.addChild(this.carousel.view)
+
+    this.carousel2 = new CarouselWrapper({
+      text: 'LIFE WORK 4',
+      maskText: 'LIFE',
+      direction: -1,
+      y:(window.innerHeight * -1) + (window.innerHeight / 2)
+    })
+    this.container.addChild(this.carousel2.view)
 
     // this.container.addChild(this.workWrapper.view)
     // this.container.addChild(this.lifeWrapper.view)
@@ -105,6 +108,25 @@ export default class Application {
       ease: Power4.easeInOut,
       paused: true
     })
+
+    // this.lifeAnimationSequence = gsap.to(this.carousel2.view, {
+    //   duration: 1,
+    //   y: this.carousel2.stripHeight,
+    //   ease: Power4.easeInOut,
+    //   paused: true,
+    //   onComplete: () => {
+    //     if (typeof(callback) !== 'undefined') {
+    //       callback()
+    //     }
+    //   }
+    // })
+
+    // this.workAnimationSequence = gsap.to(this.carousel.view, {
+    //   duration: 1,
+    //   y: 0,
+    //   ease: Power4.easeInOut,
+    //   paused: true
+    // })
   }
 
   /**************************************************/
@@ -127,7 +149,7 @@ export default class Application {
       // this.lifeWrapper.setText('WORK 4 LIFE  ')
 
       this.carousel.animate()
-      // this.text.enlarge()
+      this.carousel2.animate()
     } else {
       this.lifeAnimationSequence.reverse()
       this.workAnimationSequence.reverse()
@@ -142,6 +164,7 @@ export default class Application {
 
   render = (data:ISData):void => {
     this.carousel.update()
+    this.carousel2.update()
 
     this.workWrapper.update()
     this.lifeWrapper.update()
