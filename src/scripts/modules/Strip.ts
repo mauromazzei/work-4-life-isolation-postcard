@@ -10,14 +10,11 @@ interface Params {
 }
 
 export default class Strip {
-  private graphics:PIXI.Graphics
   private text:Text
   private tilingSprite:PIXI.TilingSprite
-  public view:PIXI.Container
   private props:Params
 
-  private originalX:number = 0
-  private posX:number = 0
+  public view:PIXI.Container
 
   constructor(props:Params) {
     this.props = props
@@ -28,23 +25,36 @@ export default class Strip {
     this.view.y = props.y
 
     this.tilingSprite = new PIXI.TilingSprite(
-      this.text.view.texture,
-      window.innerWidth,
+      this.text.texture,
+      window.innerWidth * 2,
       TextStyle.measureOfText(this.props.text).height
     );
-    this.tilingSprite.interactive = true;
-    this.tilingSprite.buttonMode = true;
+    this.tilingSprite.interactive = false;
+    this.tilingSprite.buttonMode = false;
 
-    this.view.addChild(this.text.view)
+    this.view.addChild(this.text.text)
     this.view.addChild(this.tilingSprite)
   }
 
+  setText = (str:string):void => {
+    this.text.text.text = str
+  }
+
+  animateColor = (color:string, text:string):void => { this.text.animateColor(color, text) }
+
+  setColor = (color:number) => {
+    // this.text.text.tint = color
+    // this.tilingSprite.tint = color
+    // this.tilingSprite.texture = this.text.text.texture
+
+    this.text.color = color
+  }
 
   update = ():void => {
     this.tilingSprite.tilePosition.x += this.props.speed;
   }
 
   resize = (data:ISData):void => {
-    this.tilingSprite.width = data.width
+    this.tilingSprite.width = data.width * 2
   }
 }
