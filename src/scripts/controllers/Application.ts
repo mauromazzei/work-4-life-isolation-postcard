@@ -105,7 +105,7 @@ export default class Application {
   
   init = (data:ISData):void => {
     this.loader = new PIXI.Loader()
-    this.loader.add('gosha_sansultralight', 'fonts/goshasans-ultralight-webfont.woff2');
+    this.loader.add('gosha_sansultralight', 'goshasans-ultralight-webfont.woff2');
 
     this.loader.load(() => {
       setTimeout(() => {
