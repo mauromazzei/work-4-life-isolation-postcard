@@ -31,7 +31,7 @@ export default class Application {
       width: window.innerWidth * 2, 
       height: window.innerHeight * 2,
       transparent: false,
-      backgroundColor: 0xffffff
+      backgroundColor: 0xff0000
     });
     document.body.appendChild(this.app.view);
 
@@ -49,15 +49,15 @@ export default class Application {
     this.workWrapper = new Wrapper({
       text: 'WORK',
       direction: -1,
-      y: (window.innerHeight - (window.innerHeight / 2)) * 2 + 70
     })
 
     this.lifeWrapper = new Wrapper({
       text: 'LIFE',
       direction: 1,
-      // y: (window.innerHeight * -1) + (window.innerHeight / 2)
-      y: -32
     })
+
+    this.lifeWrapper.view.y = this.getLifeY()
+    this.workWrapper.view.y = this.getWorkY()
 
     this.app.stage.addChild(this.workWrapper.view)
     this.app.stage.addChild(this.lifeWrapper.view)
@@ -111,11 +111,9 @@ export default class Application {
       setTimeout(() => {
         this.onLoadComplete()
 
-      
         this.isReady = true
         this.render(data)
-      }, 50)
-      
+      }, 50)      
     })
   }
 
@@ -154,8 +152,21 @@ export default class Application {
   /**************************************************/
 
   onResize = (data:ISData) => {
-    this.app.view.width = data.width * 2
-    this.app.view.height = data.height * 2
+    data.width *= 2
+    data.height *= 2
+
+    this.app.view.width = data.width
+    this.app.view.height = data.height
+    this.app.stage.x = window.innerWidth / 2
+    this.app.stage.y = window.innerHeight / 2
+  }
+
+  getWorkY = ():number => {
+    return window.innerHeight + 70
+  }
+
+  getLifeY = ():number => {
+    return window.innerHeight - this.lifeWrapper.view.height - 70
   }
 
   onMouseMove = (data:object) => {

@@ -16,7 +16,7 @@ export default class Background {
   }
 
   resize = (data:ISData):void => {
-    this.view.width = data.width * 2
-    this.view.height = data.height * 2
+    this.view.width = data.width
+    this.view.height = data.height
   }
 }

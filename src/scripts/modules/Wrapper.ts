@@ -9,7 +9,6 @@ import {gsap, Power4} from 'gsap';
 interface Params {
   text:string
   direction:number
-  y:number
 }
 
 export default class Wrapper {
@@ -22,7 +21,6 @@ export default class Wrapper {
   constructor(props?:Params) {
     this.props = props
     this.view = new PIXI.Container()
-    this.view.y = this.props.y
     this.rows = Math.floor(window.innerHeight / TextStyle.measureOfText(this.props.text).height)
     this.stripHeight = TextStyle.measureOfText(this.props.text).height
 
@@ -47,12 +45,6 @@ export default class Wrapper {
         y: margin * i,
         ease: Power4.easeInOut,
       })
-    }
-  }
-
-  setColor = (color:number):void => {
-    for (let i = 0; i < this.strips.length; i++) {
-      this.strips[i].setColor(color)
     }
   }
 

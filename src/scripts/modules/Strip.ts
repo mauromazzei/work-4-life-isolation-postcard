@@ -43,19 +43,11 @@ export default class Strip {
 
   animateColor = (color:string, text:string):void => { this.text.animateColor(color, text) }
 
-  setColor = (color:number) => {
-    // this.text.text.tint = color
-    // this.tilingSprite.tint = color
-    // this.tilingSprite.texture = this.text.text.texture
-
-    this.text.color = color
-  }
-
   update = ():void => {
     this.tilingSprite.tilePosition.x += this.props.speed;
   }
 
   resize = (data:ISData):void => {
-    this.tilingSprite.width = data.width * 2
+    this.tilingSprite.width = data.width
   }
 }
